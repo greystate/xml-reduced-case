@@ -1,0 +1,6 @@
+{
+  "workspace.name" : "XML Reduced Testcase",
+  "xml.catalogs" : [
+    "catalog.xml"
+  ]
+}

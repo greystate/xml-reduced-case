@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wordles xml:lang="en" xmlns="http://xmlns.greystate.dk/2022/wordles">
+	<wordle date="2023-03-08" number="627" score="5" word="regal">
+		<try>drunk</try>
+		<try>alert</try>
+		<try>lares</try>
+		<try>relay</try>
+		<try>regal</try>
+	</wordle>
+</wordles>
