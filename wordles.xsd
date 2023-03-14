@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	File:    wordles.xsd
+	Author:  Chriztian Steinmeier
+	Created: 2022-02-26
+	Description:
+		XMLSchema for my wordles XML format.
+
+	Updates:
+		2022-05-08: Add `<quordle>` element and adapt types
+		2022-03-26: Import the XML namespace to properly allow using `xml:lang`
+-->
+<xsd:schema
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://xmlns.greystate.dk/2022/wordles"
+	xmlns="http://xmlns.greystate.dk/2022/wordles"
+>
+	<xsd:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd" />
+
+	<!-- Main description -->
+	<xsd:annotation>
+		<xsd:documentation xml:lang="en">
+			<p xmlns="http://www.w3.org/1999/xhtml">
+				An XML application for keeping track of scores in a WORDLE type quiz.
+			</p>
+			<p xmlns="http://www.w3.org/1999/xhtml">
+				Typical prefix (if needed) would be <var>w</var> eg. <code>&lt;w:wordles&gt;...&lt;/w:wordles&gt;</code>
+			</p>
+		</xsd:documentation>
+	</xsd:annotation>
+
+	<!-- Root element -->
+	<xsd:element name="wordles">
+		<xsd:complexType>
+			<xsd:choice>
+				<xsd:element ref="wordles" minOccurs="0" maxOccurs="unbounded" />
+				<xsd:element ref="wordle" minOccurs="0" maxOccurs="unbounded" />
+				<xsd:element ref="quordle" minOccurs="0" maxOccurs="unbounded" />
+			</xsd:choice>
+			<xsd:attribute ref="xml:lang" />
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="wordle">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="try" minOccurs="1" maxOccurs="6" />
+			</xsd:sequence>
+			<xsd:attribute name="date" type="xsd:date" />
+			<xsd:attribute name="number" type="xsd:integer" />
+			<xsd:attribute name="score" type="wordleScore" />
+			<xsd:attribute name="word" type="guess" />
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="quordle">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="try" minOccurs="1" maxOccurs="9" />
+			</xsd:sequence>
+			<xsd:attribute name="date" type="xsd:date" />
+			<xsd:attribute name="number" type="xsd:integer" />
+			<xsd:attribute name="scores">
+				<xsd:simpleType>
+					<xsd:restriction base="scoresList">
+						<xsd:length value="4" />
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+			<xsd:attribute name="words">
+				<xsd:simpleType>
+					<xsd:restriction base="wordsList">
+						<xsd:length value="4" />
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="try">
+		<xsd:annotation>
+			<xsd:documentation>
+				<p xmlns="http://www.w3.org/1999/xhtml">One five letter word as one of 6 tries at solving the wordle (or 9 tries in a quordle).</p>
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:length value="5" />
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+
+	<xsd:simpleType name="guess">
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="5" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="wordleScore">
+		<xsd:restriction base="xsd:integer">
+			<xsd:minInclusive value="0" />
+			<xsd:maxInclusive value="6" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="quordleScore">
+		<xsd:restriction base="xsd:integer">
+			<xsd:minInclusive value="0" />
+			<xsd:maxInclusive value="9" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="scoresList">
+		<xsd:list itemType="quordleScore" />
+	</xsd:simpleType>
+
+	<xsd:simpleType name="wordsList">
+		<xsd:list itemType="guess" />
+	</xsd:simpleType>
+
+</xsd:schema>
